@@ -11,16 +11,19 @@ export class UserPage2Component {
   constructor() { }
 
   ngOnInit(): void {
-    this.socket = io.connect('http://localhost:3000'); // Replace with your server URL
-  console.log(this.socket)
+    this.socket = io.connect('http://localhost:3000'); 
+
+    // Canvas Setup --sets up event listeners on the canvas for mouse events 
     const canvas = document.getElementById('canvas') as HTMLCanvasElement;
     const context = canvas.getContext('2d');
     let isDrawing = false;
 
+    //Mousemove Event Listener
     canvas.addEventListener('mousedown', () => {
       isDrawing = true;
     });
-
+     
+    // While the user is drawing (isDrawing is true), the mousemove event is triggered.
     canvas.addEventListener('mousemove', (event) => {
       if (!isDrawing) return;
       const { offsetX, offsetY } = event;
@@ -32,7 +35,8 @@ export class UserPage2Component {
     canvas.addEventListener('mouseup', () => {
       isDrawing = false;
     });
-
+    
+    // Socket Event Listener -- The code listens for the 'draw' event from the server
     this.socket.on('draw', (data:any) => {
       const { x, y } = data;
       context?.lineTo(x, y);
